@@ -13,7 +13,7 @@ void loop()
     esc.Init();
     Serial.println("\nESC speed test");
     char input;
-    for( int i = 60; i < 180; i += 2 )
+    for( int i = 0; i < 100; i += 2 )
     {
         Serial.print( "Speed will be set to " );
         Serial.println( i );

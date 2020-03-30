@@ -6,19 +6,23 @@
 class ESC
 {
 public:
-    ESC(int pin);
+    ESC(uint16_t pin);
    
     void Init();
-    void SetSpeed( int speed );
-    void SetRawSpeed( int speed );
+
+    void SetSpeed( uint16_t speed );
+
+    void Stop();
     
 private:
-    int pin;
+    uint16_t pin;
     Servo servo;
-    static constexpr int 
-        increase_delay = 200,
-        increase_value = 2,
-        init_value = 30,
-        init_wait = 3000,
-        init_speed = 0;
+    static constexpr uint16_t 
+        init_command    = 30,
+        init_wait       = 3000,
+        stop_command    = 10,
+        max_speed       = 100,
+        min_speed       = 0,
+        max_raw_speed   = 180,
+        min_raw_speed   = 63;
 };
