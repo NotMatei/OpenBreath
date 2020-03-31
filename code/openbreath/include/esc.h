@@ -7,12 +7,15 @@ class ESC
 {
 public:
     ESC(uint16_t pin);
+    ESC( const ESC & esc );
    
     void Init();
 
-    void SetSpeed( uint16_t speed );
+    bool SetSpeed( uint16_t speed );
 
-    void Stop();
+    bool Stop();
+
+    bool IsReady();
     
 private:
     uint16_t pin;
@@ -25,4 +28,5 @@ private:
         min_speed       = 0,
         max_raw_speed   = 180,
         min_raw_speed   = 63;
+    bool is_init = false;    
 };

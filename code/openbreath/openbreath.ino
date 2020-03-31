@@ -1,24 +1,21 @@
-#include "include/esc.h"
+#include "include/breathing.h"
 
-ESC esc(D4);
+Breathing::Pattern pattern( 5, 1500, 2, 1500 );
+ESC esc( D4 );
+Breathing::Engine engine( esc );
+char input = 0;
 
 void setup()
 {
     Serial.begin( 9600 );
+    while(!Serial.available());
+    Serial.println("Initializing breathing engine");
+    engine.Init();
+    Serial.println("Breathing engine initialized");
 }
 
 void loop()
 {
-    while( !Serial.available() );
-    esc.Init();
-    Serial.println("\nESC speed test");
-    char input;
-    for( int i = 0; i < 100; i += 2 )
-    {
-        Serial.print( "Speed will be set to " );
-        Serial.println( i );
-        esc.SetRawSpeed(i);
-        Serial.println( "Changing speed in 5 seconds" );
-        delay( 5000 );
-    }
+
+    engine.RunPattern( pattern );
 }
