@@ -1,11 +1,11 @@
 #include "include/esc.h"
 
-ESC esc(9);
+ESC esc(D4);
 
 void setup()
 {
     esc.Init();
-    esc.SetSpeed(50);
+    esc.SetSpeed(40);
 }
 
 void loop()
