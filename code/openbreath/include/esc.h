@@ -6,15 +6,28 @@
 class ESC
 {
 public:
+    //Controls brushless motor ESC
     ESC(uint16_t pin);
+
+    //ESC copy constructor
     ESC( const ESC & esc );
    
+    //Sends init_command to ESC and waits for init_wait
+    //milliseconds. It also sets is_init to true. It
+    //needs to be called before using any other 
+    //functions that talk to the ESC in any way.
     void Init();
 
+    //Set's the speed of the motor. Works in percentage
+    //from 0% to 100%. Returns true if Init was called
+    //before, false if otherweise.
     bool SetSpeed( uint16_t speed );
 
+    //Sends stop_command to ESC. Returns true if Init 
+    //was called before, false if otherweise.
     bool Stop();
 
+    //Returns the value of is_init.
     bool IsReady();
     
 private:

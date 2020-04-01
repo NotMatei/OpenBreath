@@ -35,6 +35,16 @@ Controller::Controller( size_t amount, Command * commands, VoidCallback default_
         command_buffer[i] = new Command(commands[i]);
 }
 
+Controller::~Controller()
+{
+    for( size_t i = 0; i < command_list_size; i++ )
+    {
+        if(command_buffer[i] != nullptr)
+            delete command_buffer[i];
+    }
+    delete [] command_buffer;
+}
+
 void Controller::AddCharacter( char c )
 {
     if( buffer_index >= buffer_size - 2 || c == end_char || c == nl_char )
