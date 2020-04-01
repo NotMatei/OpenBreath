@@ -2,29 +2,24 @@
 
 using namespace Breathing;
 
-Pattern::Pattern( const Pattern & pattern )
-{
-    speed_a = pattern.speed_a;
-    time_a  = pattern.time_a;
-    speed_b = pattern.speed_b;
-    time_b  = pattern.time_b;
-}
-
 void Engine::Init()
 {
-    if(!esc.IsReady())
-    {
-        esc.Init();
-    }
+    esc.Init();
 }
 
-bool Engine::RunPattern( Pattern & pattern )
+bool Engine::RunPattern( PatternElement * pattern, size_t size )
 {
     if(!esc.IsReady())
         return false;
-    esc.SetSpeed( pattern.speed_a );
-    delay( pattern.time_a );
-    esc.SetSpeed( pattern.speed_b );
-    delay( pattern.time_b );
+    for( size_t i = 0; i < size; i++ )
+    {
+        esc.SetSpeed( pattern[i].speed );
+        delay( pattern[i].time );
+    }
     return true;
+}
+
+ESC & Engine::GetESC()
+{
+    return esc;
 }

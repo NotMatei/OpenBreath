@@ -1,13 +1,13 @@
 #include "include/terminal.h"
 
-static char 
-    Terminal::out_buffer[buffer_size]               = {0},
-    Terminal::in_buffer[buffer_size]                = {0};
+char 
+    Terminal::out_buffer[buffer_size]           = {0},
+    Terminal::in_buffer[buffer_size]            = {0};
     
-static VoidCallback Terminal::input_callback        = nullptr;
-static VoidStringCallback Terminal::output_callback = nullptr;
+VoidCallback Terminal::input_callback           = nullptr;
+VoidStringCallback Terminal::output_callback    = nullptr;
 
-static size_t Terminal::buffer_index                = 0;
+size_t Terminal::buffer_index                   = 0;
 
 void Terminal::SetReturnCallback( VoidCallback callback )
 {
@@ -23,6 +23,7 @@ void Terminal::AddCharacter( char c )
 {
     if( buffer_index >= buffer_size - 2 || c == end_char || c == nl_char )
     {
+        printf("\n\r");
         RunReturnCallback();
         ResetInputBuffer();
     }
@@ -65,7 +66,7 @@ void Terminal::ResetInputBuffer()
 {
     buffer_index = 0;
     memset( in_buffer, 0, buffer_size );
-    printf("\n\r%s", shell_s);
+    printf("%s", shell_s);
 }
 
 void Terminal::ResetOutputBuffer()
