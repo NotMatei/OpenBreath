@@ -6,78 +6,41 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define TERMINAL_DEBUG
+#include <stdarg.h>
 
-namespace Terminal
+typedef void (*VoidCallback)( void );
+typedef void (*VoidStringCallback)( String );
+
+class Terminal
 {
-    typedef void (*VoidCallback)( void );
+public:
+    static void SetReturnCallback( VoidCallback callback );
+    static void RunReturnCallback();
+    
+    static void AddCharacter( char c );
+    static void SetOutputCallback( VoidStringCallback callback );
 
-    class Command
-    {
-    public:
-        //The name of Command is the name used when checking
-        //the command against user input. The callback
-        //must be used with void functions with no parameters
-        //(as defined by VoidCallback).
-        Command::Command( String name, VoidCallback callback ):
-            callback( callback ), name(name) {}
-        
-        //Command's copy constructor
-        Command( const Command & command );
+    static String GetBuffer();
+    static void Reset();
+    static void ResetInputBuffer();
+    static void ResetOutputBuffer();
 
-        //Returns true if this->name == command
-        bool IsCommand( String command );
+    static void printf( const char * format, ... );
 
-        //Runs the callback function defined in the
-        //constructor. If it was set to nullptr, it will do
-        //nothing.
-        void Run();
+private:
+    static constexpr size_t
+        buffer_size             = 100;
+    static constexpr char
+        end_char                = '\r',
+        nl_char                 = '\n',
+        back_char               = 8;
+    static constexpr char *
+        shell_s                 = "$ ";
 
-    private:
-        String name;
-        VoidCallback callback   = nullptr;
-    };
-
-    class Controller
-    {
-    public:
-        //"amounts" represents the amount of commands passed in 
-        //the "commands" array. "default_callback" is the 
-        //function to be called whenever the command parsed was
-        //not found.
-        Controller( size_t amount, Command * commands, VoidCallback default_command );
-
-        //Frees command_buffer and children.
-        ~Controller();
-
-        //Adds character to "buffer". It calls ProcessComamnd
-        //whenever any of the scape commands is detected
-        //or the "buffer" has been filled.
-        void AddCharacter( char c );
-
-    private:
-        //Checks the buffer against the commands from
-        //command_buffer. Runs the command if a match was
-        //found and runs default_command otherwise.
-        void ProcessCommand();
-        static constexpr size_t
-            buffer_size             = 100;
-        static constexpr char
-            end_char                = '\r',
-            nl_char                 = '\n';
-
-        char buffer[buffer_size]    = {0};
-
-        size_t
-            buffer_index            = 0,
-            command_list_size       = 0;
-
-        Command ** command_buffer   = nullptr;
-
-        VoidCallback 
-            default_command         = nullptr;
-        
-        //Internal use only
-        bool command_is_valid;
-    };
-}
+    static char 
+        out_buffer[buffer_size],
+        in_buffer[buffer_size];
+    static VoidCallback input_callback;
+    static VoidStringCallback output_callback;
+    static size_t buffer_index;
+};

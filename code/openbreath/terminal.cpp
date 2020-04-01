@@ -1,77 +1,91 @@
 #include "include/terminal.h"
 
-using namespace Terminal;
+static char 
+    Terminal::out_buffer[buffer_size]               = {0},
+    Terminal::in_buffer[buffer_size]                = {0};
+    
+static VoidCallback Terminal::input_callback        = nullptr;
+static VoidStringCallback Terminal::output_callback = nullptr;
 
-Command::Command( const Command & command )
+static size_t Terminal::buffer_index                = 0;
+
+void Terminal::SetReturnCallback( VoidCallback callback )
 {
-    name        = command.name;
-    callback    = command.callback;
+    input_callback = callback;
 }
 
-bool Command::IsCommand( String command )
+void Terminal::RunReturnCallback()
 {
-#ifdef TERMINAL_DEBUG
-    Serial.print("command: [");
-    Serial.print(command);
-    Serial.println("]");
-    Serial.print("name: [");
-    Serial.print(name);
-    Serial.println("]");
-#endif
-    return command == name;
+    (*input_callback)();
 }
 
-void Command::Run()
-{
-    if(callback != nullptr)
-        (*callback)();
-}
-
-Controller::Controller( size_t amount, Command * commands, VoidCallback default_command ):
-    command_list_size(amount), default_command(default_command)
-{
-    command_buffer = (Command **)calloc( 1, sizeof(Command*) * amount );
-    for( size_t i = 0; i < amount; i++ )
-        command_buffer[i] = new Command(commands[i]);
-}
-
-Controller::~Controller()
-{
-    for( size_t i = 0; i < command_list_size; i++ )
-    {
-        if(command_buffer[i] != nullptr)
-            delete command_buffer[i];
-    }
-    delete [] command_buffer;
-}
-
-void Controller::AddCharacter( char c )
+void Terminal::AddCharacter( char c )
 {
     if( buffer_index >= buffer_size - 2 || c == end_char || c == nl_char )
     {
-        ProcessCommand();
-        buffer_index = 0;
+        RunReturnCallback();
+        ResetInputBuffer();
     }
     else
     {
-        buffer[buffer_index] = c;
-        buffer_index++;
+        if(c == back_char && buffer_index > 0)
+        {
+            buffer_index--;
+            in_buffer[buffer_index] = 0;
+            printf("\r%s%s \033[1D", shell_s, in_buffer);
+        }
+        else
+        {
+            if(c == back_char)
+                printf(" ");
+            in_buffer[buffer_index] = c;
+            printf("%c", c);
+            buffer_index++;
+        }
     }
 }
 
-void Controller::ProcessCommand()
+void Terminal::SetOutputCallback( VoidStringCallback callback )
 {
-    for( size_t i = 0; i < command_list_size; i++ )
-    {
-        if(command_buffer[i]->IsCommand( buffer ))
-        {
-            command_buffer[i]->Run();
-            return;
-        }
-    }
-    if( default_command != nullptr)
-    {
-        (*default_command)();
-    }
-    memset(buffer, 0, buffer_size);
+    output_callback = callback;
+}
+
+String Terminal::GetBuffer()
+{
+    return in_buffer;
+}
+
+void Terminal::Reset()
+{
+    ResetInputBuffer();
+    ResetOutputBuffer();
+}
+
+void Terminal::ResetInputBuffer()
+{
+    buffer_index = 0;
+    memset( in_buffer, 0, buffer_size );
+    printf("\n\r%s", shell_s);
+}
+
+void Terminal::ResetOutputBuffer()
+{
+    memset( out_buffer, 0, buffer_size );
+}
+
+void Terminal::printf( const char * format, ... )
+{
+    if(output_callback == nullptr)
+        return;
+        
+    ResetOutputBuffer();
+
+    va_list arg;
+    va_start( arg, format );
+
+    vsnprintf( out_buffer, buffer_size-1, format, arg );
+
+    va_end(arg);
+
+    (*output_callback)( out_buffer );
 }
