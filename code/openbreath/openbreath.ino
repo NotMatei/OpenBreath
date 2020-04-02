@@ -1,7 +1,9 @@
 #include "include/terminal.h"
 #include "include/breathing.h"
 
-ESC esc(4);
+#define ESC_PIN 9
+
+ESC esc(ESC_PIN);
 Breathing::Engine engine(esc);
 
 Breathing::PatternElement TestPattern[2] = {
@@ -27,17 +29,21 @@ void on_return()
     {
         Terminal::printf("Initialzing ESC...\n\r");
         engine.Init();
+        Terminal::printf("Done initializing ESC\n\r");
     }
     else if( input == "test speed" )
     {
         Terminal::printf("Running test pattern...\n\r");
         engine.RunPattern( TestPattern, 2 );
         engine.GetESC().Stop();
+        Terminal::printf("Done running test pattern\n\r");
     }
     else if( input == "stop motor" )
     {
         Terminal::printf("Stopping motor...\n\r");
         engine.GetESC().Stop();
+        delay(3000);
+        Terminal::printf("Motor stopped\n\r");
     }
     else if( input == "run motor" )
     {

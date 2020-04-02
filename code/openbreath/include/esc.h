@@ -23,6 +23,9 @@ public:
     //before, false if otherweise.
     bool SetSpeed( uint16_t speed );
 
+    //Handler for Servo::write()
+    bool SetRawSpeed( uint16_t speed );
+
     //Sends stop_command to ESC. Returns true if Init 
     //was called before, false if otherweise.
     bool Stop();

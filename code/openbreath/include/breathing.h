@@ -32,6 +32,6 @@ namespace Breathing
         ESC & GetESC();
         
     private:
-        ESC esc;    
+        ESC & esc;    
     };
 }

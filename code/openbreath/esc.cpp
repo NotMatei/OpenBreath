@@ -2,9 +2,7 @@
 
 ESC::ESC(uint16_t pin):
     pin(pin)
-{
-    servo.attach( pin );
-}
+{}
 
 ESC::ESC( const ESC & esc )
 {
@@ -15,6 +13,7 @@ ESC::ESC( const ESC & esc )
 
 void ESC::Init()
 {
+    servo.attach( pin );
     servo.write( init_command );
     delay( init_wait );
     Stop();
@@ -23,9 +22,14 @@ void ESC::Init()
 
 bool ESC::SetSpeed( uint16_t speed )
 {
+    return SetRawSpeed(
+        map(speed, min_speed, max_speed, min_raw_speed, max_raw_speed)
+    );
+}
+bool ESC::SetRawSpeed( uint16_t speed )
+{
     if(!is_init)
         return false;
-    speed = map(speed, min_speed, max_speed, min_raw_speed, max_raw_speed);
     servo.write( speed );
     return true;
 }
