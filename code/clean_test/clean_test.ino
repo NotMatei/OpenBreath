@@ -13,30 +13,15 @@ void setup(){
   pinMode(ledPin,OUTPUT);
   pinMode(buttonPin,INPUT);
   
-  esc_signal.attach(9);
+  esc_signal.attach(D4);
   esc_signal.write(30);
   delay(3000);
 }
 
-void loop(){
-
-  buttonState = digitalRead(buttonPin);
-  
-  if (buttonState == HIGH){
-
-    digitalWrite(ledPin,HIGH);
-    
-    esc_signal.write(58);//Exhale speed
+void loop(){  
+  esc_signal.write(58);//Exhale speed
   delay(1875);//16 exhales per minute
   
   esc_signal.write(80); //inhale speed
   delay(1875);//16 inhales per minute
-  }
-  else {
-    digitalWrite(ledPin,LOW);
-
-    esc_signal.write(55);
-  delay(100);
-  }
-  delay(100);
 }
