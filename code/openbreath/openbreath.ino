@@ -59,16 +59,12 @@ void setup()
     Terminal::SetOutputCallback( &print );
     while(!Serial.available());
     Terminal::Reset();
-    while (1)
-    {
-        if(Serial.available())
-        {
-            Terminal::AddCharacter(Serial.read());
-        }
-    }
-    
 }
 
 void loop()
 {
+    if(Serial.available())
+    {
+        Terminal::AddCharacter(Serial.read());
+    }
 }
