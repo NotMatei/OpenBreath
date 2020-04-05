@@ -25,13 +25,7 @@ void print( String msg )
 void on_return()
 {
     String input = Terminal::GetBuffer();
-    if( input == "init esc" )
-    {
-        Terminal::printf("Initialzing ESC...\n\r");
-        engine.Init();
-        Terminal::printf("Done initializing ESC\n\r");
-    }
-    else if( input == "test speed" )
+    if( input == "test speed" )
     {
         Terminal::printf("Running test pattern...\n\r");
         engine.RunPattern( TestPattern, 2 );
@@ -57,6 +51,9 @@ void setup()
     Serial.begin( 115200 );
     Terminal::SetReturnCallback( &on_return );
     Terminal::SetOutputCallback( &print );
+    Terminal::printf("Initialzing ESC...\n\r");
+    engine.Init();
+    Terminal::printf("Done initializing ESC\n\r");
     while(!Serial.available());
     Terminal::Reset();
 }
