@@ -51,6 +51,7 @@ void setup()
     Serial.begin( 115200 );
     Terminal::SetReturnCallback( &on_return );
     Terminal::SetOutputCallback( &print );
+    //Let's try to leave ESC::Init() at the setup
     Terminal::printf("Initialzing ESC...\n\r");
     engine.Init();
     Terminal::printf("Done initializing ESC\n\r");
