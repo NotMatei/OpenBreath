@@ -13,10 +13,14 @@ ESC::ESC( const ESC & esc )
 
 void ESC::Init()
 {
+    if(is_init)
+        servo.detach();
+    
     servo.attach( pin );
     servo.write( init_command );
     delay( init_wait );
     Stop();
+    
     is_init = true;
 }
 
