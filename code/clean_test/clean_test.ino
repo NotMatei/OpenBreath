@@ -13,7 +13,7 @@ void setup(){
   pinMode(ledPin,OUTPUT);
   pinMode(buttonPin,INPUT);
   
-  esc_signal.attach(D4);
+  esc_signal.attach(9);
   esc_signal.write(30);
   delay(3000);
 }
