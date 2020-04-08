@@ -2,45 +2,41 @@
 
 #include "Arduino.h"
 
-#include <iostream>
-
 #include "stdio.h"
 #include "stdlib.h"
 
+#include "params.h"
+
 #include "utils.h"
+#include "version.h"
+#include "terminal.h"
+#include "breathing.h"
+#include "esc.h"
 
-class Version
+class OpenBreath
 {
-private:
-    std::string form_string( void );
 public:
-    Version( uint version, uint subversion, std::string decorator, Date build_date ):
-        version(version), 
-        subversion(subversion), 
-        decorator(decorator), 
-        build_date(build_date),
-        str(form_string()),
-        c_str( str.c_str() )
-    {}
+    OpenBreath( void );
 
-    operator std::string()
-    {
-        return str;
-    }
+    void Init();
+    void MainLoop( void );
 
-    operator char *()
+    struct Command
     {
-        return (char *)c_str;
-    }
+        const char * command;
+        VoidCallback callback;
+    };
 
 private:
-    const uint
-        version,
-        subversion;
-    const std::string
-        decorator,
-        str;
-    const char *
-        c_str;
-    Date build_date;
+    static void TerminalPrint( const char * msg );
+    static void ParseCommand( const char * msg );
+
+    ESC esc;
+    BreathingEngine engine;
+
+    Version version;
+    
+    static constexpr VoidCharStrCallback 
+        terminal_on_return  = &ParseCommand,
+        terminal_output     = &TerminalPrint;
 };

@@ -2,6 +2,9 @@
 
 #include "Arduino.h"
 
+#include "version.h"
+#include "params.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,23 +12,26 @@
 #include <stdarg.h>
 
 typedef void (*VoidCallback)( void );
-typedef void (*VoidStringCallback)( String );
+typedef void (*VoidCharStrCallback)( const char * );
 
 class Terminal
 {
 public:
-    static void SetReturnCallback( VoidCallback callback );
+    static void SetReturnCallback( VoidCharStrCallback callback );
     static void RunReturnCallback();
     
     static void AddCharacter( char c );
-    static void SetOutputCallback( VoidStringCallback callback );
+    static void SetOutputCallback( VoidCharStrCallback callback );
 
     static String GetBuffer();
+
     static void Reset();
     static void ResetInputBuffer();
     static void ResetOutputBuffer();
 
-    static void printf( const char * format, ... );
+    static void log( const char * format, ... );
+
+    static void PrintWelcome( Version & version);
 
 private:
     static constexpr size_t
@@ -40,7 +46,10 @@ private:
     static char 
         out_buffer[buffer_size],
         in_buffer[buffer_size];
-    static VoidCallback input_callback;
-    static VoidStringCallback output_callback;
+    
+    static VoidCharStrCallback 
+        input_callback,
+        output_callback;
+        
     static size_t buffer_index;
 };

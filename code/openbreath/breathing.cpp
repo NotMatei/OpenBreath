@@ -1,13 +1,11 @@
 #include "include/breathing.h"
 
-using namespace Breathing;
-
-void Engine::Init()
+void BreathingEngine::Init()
 {
     esc.Init();
 }
 
-bool Engine::RunPattern( PatternElement * pattern, size_t size )
+bool BreathingEngine::RunPattern( PatternElement * pattern, size_t size )
 {
     if(!esc.IsReady())
         return false;
@@ -19,7 +17,7 @@ bool Engine::RunPattern( PatternElement * pattern, size_t size )
     return true;
 }
 
-ESC & Engine::GetESC()
+ESC & BreathingEngine::GetESC()
 {
     return esc;
 }
