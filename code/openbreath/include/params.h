@@ -12,13 +12,14 @@
 
 //Settings
 //  Misc
-#define OB_WAIT_FOR_SERIAL
 #define OB_PRINT_WELCOME
+#define OB_HOOK_CHAR 's'
 
 //  Esc
-#define OB_ESC_PIN 9
+#define OB_ESC_PIN D4
 
 //  Serial
+//#define OB_WAIT_FOR_SERIAL
 #define OB_TERMINAL_BAUD_RATE 115200
 #define OB_TERMINAL_SERIAL Serial
 #define OB_SERIAL_WAIT_TIME 5000

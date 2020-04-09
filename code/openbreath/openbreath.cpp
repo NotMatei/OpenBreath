@@ -2,23 +2,17 @@
 
 ESC OpenBreath::esc( OB_ESC_PIN );
 BreathingEngine OpenBreath::engine( OpenBreath::esc );
-bool OpenBreath::serial_connected = false;
+bool OpenBreath::run_motor = true;
+char input_char = 0;
 
 void OpenBreath::Init()
 {
     OB_TERMINAL_SERIAL.begin( OB_TERMINAL_BAUD_RATE );
+    engine.Init();
     Terminal::SetReturnCallback( &ParseCommand );
     Terminal::SetOutputCallback( &TerminalPrint );
     #ifdef OB_WAIT_FOR_SERIAL
-    for(uint8_t i = 0; i < OB_SERIAL_WAIT_TIME; i++)
-    {
-        if(OB_TERMINAL_SERIAL.available())
-        {
-            serial_connected = true;
-            break;
-        }
-        delay(1);
-    }
+    while(!OB_TERMINAL_SERIAL.available()>0);
     #endif
     #ifdef OB_PRINT_WELCOME
     Terminal::PrintWelcome();
@@ -28,15 +22,16 @@ void OpenBreath::Init()
 
 void OpenBreath::MainLoop()
 {
-    if( serial_connected )
+    if(OB_TERMINAL_SERIAL.available())
     {
-        if(OB_TERMINAL_SERIAL.available())
-        {
-            Terminal::AddCharacter(OB_TERMINAL_SERIAL.read());
-        }
+        input_char = OB_TERMINAL_SERIAL.read();
+        if(input_char == OB_HOOK_CHAR && run_motor)
+            OpenBreath::Hook();
+        Terminal::AddCharacter(input_char);
     }
-    else
+    else if( run_motor )
     {
+        Terminal::log("\n\rRunning %s pattern", OB_DEFAULT_PATTERN.name );
         engine.RunPattern( OB_DEFAULT_PATTERN );
     }
 }
@@ -61,4 +56,41 @@ void OpenBreath::PrintHelp()
     {
         Terminal::log("\r%s: %s\n", commands[i].command, commands[i].description);
     }
+}
+
+void OpenBreath::ReleaseTerminal()
+{
+    Terminal::log("Terminal will now be released. OpenBreath will now resume with default pattern.\n");
+    run_motor = true;
+}
+
+void OpenBreath::Hook()
+{
+    if( !run_motor )
+    {
+        Terminal::log("Terminal already hooked\n");
+    }
+    else
+    {
+        run_motor = false;
+        Terminal::PrintWelcome();
+    }
+}
+
+void OpenBreath::DefaultPatternInfo()
+{
+    Terminal::log(
+        "Name: %s\n\rCycle A: Speed %d%%, Time: %d\n\rCycle B: Speed %d%%, Time: %d\n",
+        OB_DEFAULT_PATTERN.name,
+        OB_DEFAULT_PATTERN.speed_a,
+        OB_DEFAULT_PATTERN.time_a,
+        OB_DEFAULT_PATTERN.speed_b,
+        OB_DEFAULT_PATTERN.time_b
+    );
+}
+
+void OpenBreath::StopMotor()
+{
+    Terminal::log( "Stopping motor...\n" );
+    engine.GetESC().Stop();
 }

@@ -7,7 +7,6 @@
 
 #include "params.h"
 
-#include "utils.h"
 #include "terminal.h"
 #include "callbacks.h"
 #include "breathing.h"
@@ -36,9 +35,12 @@ private:
     static void ParseCommand( const char * msg );
 
     static void PrintHelp( void );
-    static void Pong( void );
+    static void ReleaseTerminal( void );
+    static void Hook( void );
+    static void DefaultPatternInfo( void );
+    static void StopMotor( void );
 
-    static bool serial_connected;
+    static bool run_motor;
 
 
     static Command commands[];

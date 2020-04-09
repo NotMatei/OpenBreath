@@ -4,10 +4,13 @@
 
 #include "esc.h"
 
-struct PatternElement
+struct Pattern
 {
-    uint8_t speed;
-    int time;
+    const char * name;
+    uint8_t speed_a;
+    uint8_t speed_b;
+    int time_a;
+    int time_b;
 };
 
 class BreathingEngine
@@ -25,7 +28,7 @@ public:
     //  It sets the speed to speed_a first, and remains there for time_a
     //  milliseconds. It then moves on to speed_b, where it remains there
     //  for time_b milliseconds.
-    bool RunPattern( PatternElement pattern[2] );
+    bool RunPattern( const Pattern &pattern );
 
     ESC & GetESC();
     

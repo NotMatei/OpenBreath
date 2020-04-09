@@ -2,7 +2,10 @@
 
 #include "breathing.h"
 
-const PatternElement Normal1[2] = {
-    { .speed = 10, .time = 1000 },
-    { .speed = 5, .time = 1000 }
+const Pattern Normal1 = {
+    .name = "Normal1 setting",
+    .speed_a = 2,
+    .speed_b = 1,
+    .time_a = 1000,
+    .time_b = 1000,
 };

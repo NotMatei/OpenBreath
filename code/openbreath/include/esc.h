@@ -35,7 +35,7 @@ private:
     Servo servo;
     static constexpr uint16_t 
         init_command    = 30,
-        init_wait       = 3000,
+        init_wait       = 4000,
         stop_command    = 10,
         max_speed       = 100,
         min_speed       = 0,
