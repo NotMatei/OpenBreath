@@ -107,6 +107,6 @@ void Terminal::PrintWelcome()
     );
     log( "\n\rCopyright (C) 2020 Matei Dima, Jose Ricardo Monegro" );
     log( "\n\rAll rights reserved." );
-    log( "\n\rThis program is licensed under the BSD-style license found in the" );
-    log( "LICENSE file in provided alongside it.\n" );
+    log( "\n\rThis program is licensed under the BSD-style license found in the " );
+    log( "LICENSE file provided alongside its pacakge.\n" );
 }

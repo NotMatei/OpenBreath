@@ -72,6 +72,7 @@ void OpenBreath::Hook()
     else
     {
         run_motor = false;
+        Terminal::log("\n");
         StopMotor();
         Terminal::PrintWelcome();
         Terminal::Reset();
