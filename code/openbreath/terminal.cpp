@@ -4,8 +4,8 @@ char
     Terminal::out_buffer[buffer_size]           = {0},
     Terminal::in_buffer[buffer_size]            = {0};
     
-VoidCharStrCallback Terminal::input_callback     = nullptr;
-VoidCharStrCallback Terminal::output_callback    = nullptr;
+VoidCharStrCallback Terminal::input_callback     = NULL;
+VoidCharStrCallback Terminal::output_callback    = NULL;
 
 size_t Terminal::buffer_index                   = 0;
 
@@ -16,32 +16,37 @@ void Terminal::SetReturnCallback( VoidCharStrCallback callback )
 
 void Terminal::RunReturnCallback()
 {
+    if( input_callback == NULL )
+        return;
     (*input_callback)(in_buffer);
 }
 
 void Terminal::AddCharacter( char c )
 {
-    if( buffer_index >= buffer_size - 2 || c == end_char || c == nl_char )
+    if( buffer_index >= buffer_size - 2 || c == nl_char )
     {
         log("\n\r");
         RunReturnCallback();
-        ResetInputBuffer();
+        Reset();
     }
     else
     {
-        if(c == back_char && buffer_index > 0)
+        if( c == back_char && buffer_index > 0 )
         {
             buffer_index--;
             in_buffer[buffer_index] = 0;
-            log("\r%s%s \033[1D", shell_s, in_buffer);
+            log("\r%s%s \b", shell_s, in_buffer);
         }
         else
         {
-            if(c == back_char)
+            if( c == back_char )
                 printf(" ");
-            in_buffer[buffer_index] = c;
-            log("%c", c);
-            buffer_index++;
+            if( c >= 32 && c <= 126 )
+            {
+                in_buffer[buffer_index] = c;
+                buffer_index++;
+                log("%c", c);
+            }
         }
     }
 }
@@ -76,7 +81,7 @@ void Terminal::ResetOutputBuffer()
 
 void Terminal::log( const char * format, ... )
 {
-    if(output_callback == nullptr)
+    if(output_callback == NULL)
         return;
         
     ResetOutputBuffer();
@@ -84,20 +89,23 @@ void Terminal::log( const char * format, ... )
     va_list arg;
     va_start( arg, format );
     
-    vsnprintf( out_buffer+1, buffer_size-2, format, arg );
+    vsnprintf( out_buffer, buffer_size-1, format, arg );
 
     va_end(arg);
 
     (*output_callback)( out_buffer );
 }
 
-void Terminal::PrintWelcome( Version &version )
+void Terminal::PrintWelcome()
 {
     log( 
-        "\n\rOpenBreath %s"
+        "\n\rOpenBreath v%u.%u%s Built on: %s"
         "\n\rCopyright (C) 2020 Matei Dima, Jose Ricardo Monegro" 
         "\n\rAll rights reserved."
-        "\n\rLicensed under the X license\n", 
-        version.c_string()
+        "\n\rLicensed under the [MISSING] license", 
+        OB_MAJOR_VER,
+        OB_MINOR_VER,
+        OB_DECORATOR,
+        OB_BUILD_DATE
     );
 }

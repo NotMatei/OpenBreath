@@ -25,7 +25,7 @@ public:
     //  It sets the speed to speed_a first, and remains there for time_a
     //  milliseconds. It then moves on to speed_b, where it remains there
     //  for time_b milliseconds.
-    bool RunPattern( PatternElement * pattern, size_t size );
+    bool RunPattern( PatternElement pattern[2] );
 
     ESC & GetESC();
     

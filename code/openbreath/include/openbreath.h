@@ -8,35 +8,38 @@
 #include "params.h"
 
 #include "utils.h"
-#include "version.h"
 #include "terminal.h"
+#include "callbacks.h"
 #include "breathing.h"
+#include "patterns.h"
 #include "esc.h"
+
+struct Command
+{
+    const char * command;
+    const char * description;
+    VoidCallback callback;
+};
+
 
 class OpenBreath
 {
 public:
-    OpenBreath( void );
+    static void Init();
+    static void MainLoop( void );
 
-    void Init();
-    void MainLoop( void );
-
-    struct Command
-    {
-        const char * command;
-        VoidCallback callback;
-    };
+    static ESC esc;
+    static BreathingEngine engine;
 
 private:
     static void TerminalPrint( const char * msg );
     static void ParseCommand( const char * msg );
 
-    ESC esc;
-    BreathingEngine engine;
+    static void PrintHelp( void );
+    static void Pong( void );
 
-    Version version;
-    
-    static constexpr VoidCharStrCallback 
-        terminal_on_return  = &ParseCommand,
-        terminal_output     = &TerminalPrint;
+    static bool serial_connected;
+
+
+    static Command commands[];
 };

@@ -5,15 +5,16 @@ void BreathingEngine::Init()
     esc.Init();
 }
 
-bool BreathingEngine::RunPattern( PatternElement * pattern, size_t size )
+bool BreathingEngine::RunPattern( PatternElement pattern[2] )
 {
     if(!esc.IsReady())
         return false;
-    for( size_t i = 0; i < size; i++ )
-    {
-        esc.SetSpeed( pattern[i].speed );
-        delay( pattern[i].time );
-    }
+        
+    esc.SetSpeed( pattern[0].speed );
+    delay( pattern[0].time );    
+    esc.SetSpeed( pattern[1].speed );
+    delay( pattern[1].time );
+
     return true;
 }
 

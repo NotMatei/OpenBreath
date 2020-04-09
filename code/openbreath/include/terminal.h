@@ -2,17 +2,14 @@
 
 #include "Arduino.h"
 
-#include "version.h"
 #include "params.h"
+#include "callbacks.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <stdarg.h>
-
-typedef void (*VoidCallback)( void );
-typedef void (*VoidCharStrCallback)( const char * );
 
 class Terminal
 {
@@ -25,17 +22,17 @@ public:
 
     static String GetBuffer();
 
-    static void Reset();
-    static void ResetInputBuffer();
-    static void ResetOutputBuffer();
+    static void Reset( void );
+    static void ResetInputBuffer( void );
+    static void ResetOutputBuffer( void );
 
     static void log( const char * format, ... );
 
-    static void PrintWelcome( Version & version);
+    static void PrintWelcome( void );
 
 private:
     static constexpr size_t
-        buffer_size             = 100;
+        buffer_size             = 150;
     static constexpr char
         end_char                = '\r',
         nl_char                 = '\n',

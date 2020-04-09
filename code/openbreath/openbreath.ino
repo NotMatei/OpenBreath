@@ -1,13 +1,11 @@
 #include "include/openbreath.h"
 
-OpenBreath ob;
-
 void setup()
 {
-    ob.Init();
+    OpenBreath::Init();
 }
 
 void loop()
 {
-    ob.MainLoop();
+    OpenBreath::MainLoop();
 }

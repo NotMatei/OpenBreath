@@ -21,3 +21,7 @@
 //  Serial
 #define OB_TERMINAL_BAUD_RATE 115200
 #define OB_TERMINAL_SERIAL Serial
+#define OB_SERIAL_WAIT_TIME 5000
+
+// Breathing
+#define OB_DEFAULT_PATTERN Normal1
