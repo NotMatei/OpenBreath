@@ -32,7 +32,7 @@ public:
 
 private:
     static constexpr size_t
-        buffer_size             = 150;
+        buffer_size             = 100;
     static constexpr char
         end_char                = '\r',
         nl_char                 = '\n',

@@ -6,5 +6,7 @@ Command OpenBreath::commands[] = {
     { .command = "default info", .description = "Shows default pattern info", .callback = &OpenBreath::DefaultPatternInfo },
     { .command = "s", .description = "Hooks terminal from normal opration", .callback = &OpenBreath::Hook },
     { .command = "stop motor", .description = "Sets motor speed to 0%", .callback = &OpenBreath::StopMotor },
+    { .command = "set motor speed", .description = "Sets motor speed to user input", .callback = &OpenBreath::SetMotorSpeed },
+
     {NULL, NULL, NULL}
 };

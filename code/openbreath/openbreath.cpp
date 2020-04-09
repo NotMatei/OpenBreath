@@ -17,7 +17,6 @@ void OpenBreath::Init()
     #ifdef OB_PRINT_WELCOME
     Terminal::PrintWelcome();
     #endif
-    Terminal::Reset();
 }
 
 void OpenBreath::MainLoop()
@@ -73,7 +72,9 @@ void OpenBreath::Hook()
     else
     {
         run_motor = false;
+        StopMotor();
         Terminal::PrintWelcome();
+        Terminal::Reset();
     }
 }
 
@@ -93,4 +94,19 @@ void OpenBreath::StopMotor()
 {
     Terminal::log( "Stopping motor...\n" );
     engine.GetESC().Stop();
+}
+
+void OpenBreath::SetMotorSpeed()
+{
+    Terminal::log("Motor speed: ");
+    Terminal::SetReturnCallback( &SetMotorSpeed );
+}
+
+void OpenBreath::SetMotorSpeed( const char * msg )
+{
+    uint8_t speed = atoi(msg);
+    engine.GetESC().SetSpeed(speed > 100 ? 100 : speed);
+
+    Terminal::log("Setting motor speed to %u%%\n", speed);
+    Terminal::SetReturnCallback( &ParseCommand );
 }

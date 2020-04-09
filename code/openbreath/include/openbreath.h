@@ -39,6 +39,8 @@ private:
     static void Hook( void );
     static void DefaultPatternInfo( void );
     static void StopMotor( void );
+    static void SetMotorSpeed( void );
+    static void SetMotorSpeed( const char * msg );
 
     static bool run_motor;
 

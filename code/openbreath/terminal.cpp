@@ -99,13 +99,14 @@ void Terminal::log( const char * format, ... )
 void Terminal::PrintWelcome()
 {
     log( 
-        "\n\rOpenBreath v%u.%u%s Built on: %s"
-        "\n\rCopyright (C) 2020 Matei Dima, Jose Ricardo Monegro" 
-        "\n\rAll rights reserved."
-        "\n\rLicensed under the [MISSING] license", 
+        "\n\rOpenBreath v%u.%u%s Built on: %s",
         OB_MAJOR_VER,
         OB_MINOR_VER,
         OB_DECORATOR,
         OB_BUILD_DATE
     );
+    log( "\n\rCopyright (C) 2020 Matei Dima, Jose Ricardo Monegro" );
+    log( "\n\rAll rights reserved." );
+    log( "\n\rThis program is licensed under the BSD-style license found in the" );
+    log( "LICENSE file in provided alongside it.\n" );
 }
