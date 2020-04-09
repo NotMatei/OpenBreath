@@ -16,8 +16,8 @@ ESC::ESC( const ESC & esc )
 void ESC::Init()
 {
     servo.write( init_command );
-    delay( init_wait );
     Stop();
+    delay( init_wait );
     is_init = true;
 }
 

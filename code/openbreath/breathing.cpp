@@ -1,25 +1,24 @@
 #include "include/breathing.h"
 
-using namespace Breathing;
-
-void Engine::Init()
+void BreathingEngine::Init()
 {
     esc.Init();
 }
 
-bool Engine::RunPattern( PatternElement * pattern, size_t size )
+bool BreathingEngine::RunPattern( const Pattern &pattern )
 {
     if(!esc.IsReady())
         return false;
-    for( size_t i = 0; i < size; i++ )
-    {
-        esc.SetSpeed( pattern[i].speed );
-        delay( pattern[i].time );
-    }
+    
+    esc.SetSpeed( pattern.speed_a );
+    delay( pattern.time_a );
+    esc.SetSpeed( pattern.speed_b );
+    delay( pattern.time_b );
+
     return true;
 }
 
-ESC & Engine::GetESC()
+ESC & BreathingEngine::GetESC()
 {
     return esc;
 }
