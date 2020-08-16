@@ -33,7 +33,7 @@ public:
 private:
     uint16_t pin;
     Servo servo;
-    static constexpr uint16_t 
+    const uint16_t 
         init_command    = 30,
         init_wait       = 3000,
         stop_command    = 10,
